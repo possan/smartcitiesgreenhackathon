@@ -13,7 +13,7 @@ io.on('connection', function(socket){
 });
 
 http.listen(3000, function(){
-  console.log('listening on *:3000');
+  console.log('open http://localhost:3000');
 });
 
 
@@ -21,6 +21,10 @@ try {
   var serialPort = new SerialPort("/dev/cu.usbmodem1411", {
     baudrate: 115200,
     parser: serialportmodule.parsers.readline('\n')
+  }, false);
+
+  serialPort.open(function(x) {
+    
   });
 
   serialPort.on("open", function () {
@@ -28,9 +32,14 @@ try {
 
     serialPort.on('data', function(data) {
       console.log('data received: ' + data);
-      io.emit('update', data.toString());
+      try {
+        var d = JSON.parse(data.toString());
+        io.emit('update', data.toString());
+      } catch(e) {
+      }
     });
 
   });
+
 } catch(e) {
 }
