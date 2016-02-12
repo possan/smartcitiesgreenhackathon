@@ -12,8 +12,22 @@
   <script>
     var socket = io();
 
-    socket.on('update', function(msg){
+    var nextsample = 0;
+    var lastsample = 0;
+
+    socket.on('update', function(msg) {
+      var T = (new Date()).getTime() / 1000;
+      if (T <= nextsample) {
+        return;
+      }
+      lastsample = T;
+      nextsample = T + 1.0;
+      msg = JSON.parse(msg);
       console.log('UPDATE', msg);
+      chart.push([{
+        time: T,
+        y: msg.ppm / 20
+      }]);
     });
 
     var chart = $('#areaChart').epoch({
@@ -25,8 +39,12 @@
       }]
     });
 
-    setInterval(function(){
-      chart.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+    setInterval(function() {
+      var T = (new Date()).getTime() / 1000;
+      if ((T - lastsample) > 2.0) {
+        console.log('pushing to chart');
+        chart.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+      }
     }, 100);
   </script>
 </body>
