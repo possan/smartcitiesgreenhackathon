@@ -5,8 +5,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js" type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css">
 <body>
+  <style>
+    body {
+      background-color: black;
+    }
+  </style>
   <div class="epoch-theme-dark">
-    <div id="areaChart" style="width: 100%; height: 500px" class="epoch-theme-dark category20 epoch">
+    <div id="co2" style="width: 100%; height: 30%" class="epoch-theme-dark category20 epoch">
+    </div>
+    <div id="temperature" style="width: 100%; height: 30%" class="epoch-theme-light category21 epoch">
+    </div>
+    <div id="humidity" style="width: 100%; height: 30%" class="epoch-theme-dark category22 epoch">
     </div>
   </div>
   <script>
@@ -14,6 +23,42 @@
 
     var nextsample = 0;
     var lastsample = 0;
+
+    var co2 = $('#co2').epoch({
+      type: 'time.area',
+      axes: ['bottom', 'left'],
+      data: [{
+        label: "CO2",
+        values: [ {time: (new Date()).getTime()/1000, y: 10} ]
+      }]
+    });
+
+    var temperature = $('#temperature').epoch({
+      type: 'time.area',
+      axes: ['bottom', 'left'],
+      data: [{
+        label: "Temperature",
+        values: [ {time: (new Date()).getTime()/1000, y: 10} ]
+      }]
+    });
+
+    var humidity = $('#humidity').epoch({
+      type: 'time.area',
+      axes: ['bottom', 'left'],
+      data: [{
+        label: "Humidity",
+        values: [ {time: (new Date()).getTime()/1000, y: 10} ]
+      }]
+    });
+
+    setInterval(function() {
+      var T = (new Date()).getTime() / 1000;
+      if ((T - lastsample) > 2.0) {
+        co2.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+        temperature.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+        humidity.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+      }
+    }, 1000);
 
     socket.on('update', function(msg) {
       var T = (new Date()).getTime() / 1000;
@@ -24,27 +69,18 @@
       nextsample = T + 1.0;
       msg = JSON.parse(msg);
       console.log('UPDATE', msg);
-      chart.push([{
+      co2.push([{
         time: T,
-        y: msg.ppm / 20
+        y: msg.ppm
+      }]);
+      temperature.push([{
+        time: T,
+        y: msg.temp
+      }]);
+      humidity.push([{
+        time: T,
+        y: msg.humid
       }]);
     });
-
-    var chart = $('#areaChart').epoch({
-      type: 'time.area',
-      axes: ['bottom', 'left'],
-      data: [{
-        label: "Air sensor",
-        values: [ {time: (new Date()).getTime()/1000, y: 10}]
-      }]
-    });
-
-    setInterval(function() {
-      var T = (new Date()).getTime() / 1000;
-      if ((T - lastsample) > 2.0) {
-        console.log('pushing to chart');
-        chart.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
-      }
-    }, 1000);
   </script>
 </body>
