@@ -1,9 +1,30 @@
 <script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.15/d3.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/js/epoch.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css">
+<body class="epoch-theme-dark">
+  <h1> Graph </h1>
+  <div id="lineChart" style="width: 100%; height: 500px"></div>
+  <script>
+    var socket = io();
 
-  socket.on('update', function(msg){
-  	console.log('UPDATE', msg);
-  });
+    socket.on('update', function(msg){
+      console.log('UPDATE', msg);
+    });
 
-</script>
+    var chart = $('#lineChart').epoch({
+      type: 'time.line',
+      data: [{
+        label: "Series 1",
+        values: [ {time: (new Date()).getTime()/1000, y: 10}]
+      }]
+    });
+
+    setInterval(function(){
+      console.log('pushing to chart');
+      chart.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+    }, 100);
+  </script>
+</body>
