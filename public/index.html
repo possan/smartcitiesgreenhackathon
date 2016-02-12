@@ -4,9 +4,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/js/epoch.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js" type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css">
-<body class="epoch-theme-dark">
-  <h1> Graph </h1>
-  <div id="lineChart" style="width: 100%; height: 500px"></div>
+<body>
+  <div class="epoch-theme-dark">
+    <div id="areaChart" style="width: 100%; height: 500px" class="epoch-theme-dark category20 epoch">
+    </div>
+  </div>
   <script>
     var socket = io();
 
@@ -14,16 +16,16 @@
       console.log('UPDATE', msg);
     });
 
-    var chart = $('#lineChart').epoch({
-      type: 'time.line',
+    var chart = $('#areaChart').epoch({
+      type: 'time.area',
+      axes: ['bottom', 'left'],
       data: [{
-        label: "Series 1",
+        label: "Air sensor",
         values: [ {time: (new Date()).getTime()/1000, y: 10}]
       }]
     });
 
     setInterval(function(){
-      console.log('pushing to chart');
       chart.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
     }, 100);
   </script>
