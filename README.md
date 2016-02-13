@@ -1,15 +1,13 @@
-# AWAIR
+# co2nscious
 
 Our contribution to the [Smart Cities Green Hackathon in Stockholm](http://smartcities.greenhackathon.com/) Sweco City Sensors category.
 
 Real-time & cheap sensor fusion of air, noise and light pollution to provide actionable insights to make outdoor and indoor environments liveable and green
 
 
-
 ## Slides
 
 View the [slides here](http://possan.github.io/smartcitiesgreenhackathon/slides/)
-
 
 
 ## The visualization
