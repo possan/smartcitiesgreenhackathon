@@ -4,6 +4,14 @@ Our contribution to the [Smart Cities Green Hackathon in Stockholm](http://smart
 
 Smart sensor fusion of  air, noise and light pollution to provide actionable insights to make outdoor and indoor environments liveable and green
 
+
+
+## Slides
+
+View the [slides here](http://possan.github.io/smartcitiesgreenhackathon/slides/)
+
+
+
 ## The visualization
 
 In the [app/](app/) folder you find the node.js proxy, run `npm install` then `node app.js` to start it, then go to `http://localhost:3000` to see the sensor data in real time.
