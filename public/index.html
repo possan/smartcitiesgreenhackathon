@@ -6,16 +6,68 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css">
 <body>
   <style>
-    body {
-      background-color: black;
+    html {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      height: 100%;
     }
+
+    body {
+      background-color: #000; /* 072424; */
+      margin: 0;
+      padding: 0;
+      border: 0;
+      height: 100%;
+    }
+
+    .epoch.customcolors1 .category1 .area { fill: #F3E219; }
+    .epoch.customcolors2 .category1 .area { fill: #D8A341; }
+    .epoch.customcolors3 .category1 .area { fill: #C14F11; }
+    .epoch.customcolors4 .category1 .area { fill: #077074; }
+
+    .graphgroup {
+      width: 100%;
+      height: 25%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .graphgroup h1 {
+      height: 30%;
+      font-size: 13pt;
+      color: #fff;
+      text-align: center;
+      font-family: Helvetica Neue, Helvetica;
+      font-weight: 200;
+    }
+
+    .graphgroup .graph {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70%;
+    }
+
+
   </style>
   <div class="epoch-theme-dark">
-    <div id="co2" style="width: 100%; height: 30%" class="epoch-theme-dark category20 epoch">
+    <div class="graphgroup">
+      <h1>Air quality (CO<sup>2</sup>)</h1>
+      <div id="co2" class="graph epoch-theme-dark epoch customcolors1"></div>
     </div>
-    <div id="temperature" style="width: 100%; height: 30%" class="epoch-theme-light category21 epoch">
+    <div class="graphgroup">
+      <h1>Temperature (Celsius)</h1>
+      <div id="temperature" class="graph epoch-theme-light epoch customcolors2"></div>
     </div>
-    <div id="humidity" style="width: 100%; height: 30%" class="epoch-theme-dark category22 epoch">
+    <div class="graphgroup">
+      <h1>Humidity (%)</h1>
+      <div id="humidity" class="graph epoch-theme-dark epoch customcolors3"></div>
+    </div>
+    <div class="graphgroup">
+      <h1>Sound (dB threshold)</h1>
+      <div id="soundlevel" class="graph epoch-theme-dark epoch customcolors4"></div>
     </div>
   </div>
   <script>
@@ -27,28 +79,29 @@
     var co2 = $('#co2').epoch({
       type: 'time.area',
       axes: ['bottom', 'left'],
-      data: [{
-        label: "CO2",
-        values: [ {time: (new Date()).getTime()/1000, y: 10} ]
-      }]
+      // axes: [],
+      data: [{ label: "CO2", values: [] }]
     });
 
     var temperature = $('#temperature').epoch({
       type: 'time.area',
       axes: ['bottom', 'left'],
-      data: [{
-        label: "Temperature",
-        values: [ {time: (new Date()).getTime()/1000, y: 10} ]
-      }]
+      // axes: [],
+      data: [{ label: "Temperature", values: [] }]
     });
 
     var humidity = $('#humidity').epoch({
       type: 'time.area',
       axes: ['bottom', 'left'],
-      data: [{
-        label: "Humidity",
-        values: [ {time: (new Date()).getTime()/1000, y: 10} ]
-      }]
+      // axes: [],
+      data: [{ label: "Humidity", values: [ ] }]
+    });
+
+    var soundlevel = $('#soundlevel').epoch({
+      type: 'time.area',
+      axes: ['bottom', 'left'],
+      // axes: [],
+      data: [{ label: "Sound level", values: [] }]
     });
 
     setInterval(function() {
@@ -80,6 +133,10 @@
       humidity.push([{
         time: T,
         y: msg.humid
+      }]);
+      soundlevel.push([{
+        time: T,
+        y: msg.sound
       }]);
     });
   </script>
