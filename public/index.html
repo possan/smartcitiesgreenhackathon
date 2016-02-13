@@ -21,10 +21,25 @@
       height: 100%;
     }
 
-    .epoch.customcolors1 .category1 .area { fill: #F3E219; }
-    .epoch.customcolors2 .category1 .area { fill: #D8A341; }
-    .epoch.customcolors3 .category1 .area { fill: #C14F11; }
-    .epoch.customcolors4 .category1 .area { fill: #077074; }
+    /* tweak epoch */
+
+    .epoch.customcolors .axis path {
+      stroke: #072424;
+    }
+
+    .epoch.customcolors .axis .tick line {
+      stroke: #072424;
+    }
+
+    .epoch.customcolors .axis .tick text {
+      font-size: 8pt;
+      fill: #fff;
+    }
+
+    .epoch.customcolors#co2 .category1 .area { fill: #F3E219; }
+    .epoch.customcolors#temperature .category1 .area { fill: #D8A341; }
+    .epoch.customcolors#humidity .category1 .area { fill: #C14F11; }
+    .epoch.customcolors#soundlevel .category1 .area { fill: #077074; }
 
     .graphgroup {
       width: 100%;
@@ -42,6 +57,11 @@
       font-weight: 200;
     }
 
+    .graphgroup h1 em {
+      color: #C14F11;
+      font-style: normal;
+    }
+
     .graphgroup .graph {
       position: absolute;
       bottom: 0;
@@ -54,20 +74,20 @@
   </style>
   <div class="epoch-theme-dark">
     <div class="graphgroup">
-      <h1>Air quality (CO<sup>2</sup>)</h1>
-      <div id="co2" class="graph epoch-theme-dark epoch customcolors1"></div>
+      <h1>Air quality <em>(CO<sup>2</sup>)</em></h1>
+      <div id="co2" class="graph epoch-theme-dark epoch customcolors"></div>
     </div>
     <div class="graphgroup">
-      <h1>Temperature (Celsius)</h1>
-      <div id="temperature" class="graph epoch-theme-light epoch customcolors2"></div>
+      <h1>Temperature <em>(Celsius)</em></h1>
+      <div id="temperature" class="graph epoch-theme-light epoch customcolors"></div>
     </div>
     <div class="graphgroup">
-      <h1>Humidity (%)</h1>
-      <div id="humidity" class="graph epoch-theme-dark epoch customcolors3"></div>
+      <h1>Humidity <em>(%)</em></h1>
+      <div id="humidity" class="graph epoch-theme-dark epoch customcolors"></div>
     </div>
     <div class="graphgroup">
-      <h1>Sound (dB threshold)</h1>
-      <div id="soundlevel" class="graph epoch-theme-dark epoch customcolors4"></div>
+      <h1>Sound <em>(dB threshold)</em></h1>
+      <div id="soundlevel" class="graph epoch-theme-dark epoch customcolors"></div>
     </div>
   </div>
   <script>
@@ -78,28 +98,28 @@
 
     var co2 = $('#co2').epoch({
       type: 'time.area',
-      axes: ['bottom', 'left'],
+      axes: ['bottom', 'right'],
       // axes: [],
       data: [{ label: "CO2", values: [] }]
     });
 
     var temperature = $('#temperature').epoch({
       type: 'time.area',
-      axes: ['bottom', 'left'],
+      axes: ['bottom', 'right'],
       // axes: [],
       data: [{ label: "Temperature", values: [] }]
     });
 
     var humidity = $('#humidity').epoch({
       type: 'time.area',
-      axes: ['bottom', 'left'],
+      axes: ['bottom', 'right'],
       // axes: [],
       data: [{ label: "Humidity", values: [ ] }]
     });
 
     var soundlevel = $('#soundlevel').epoch({
       type: 'time.area',
-      axes: ['bottom', 'left'],
+      axes: ['bottom', 'right'],
       // axes: [],
       data: [{ label: "Sound level", values: [] }]
     });
@@ -107,9 +127,10 @@
     setInterval(function() {
       var T = (new Date()).getTime() / 1000;
       if ((T - lastsample) > 2.0) {
-        co2.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
-        temperature.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
-        humidity.push([{time: (new Date()).getTime()/1000, y: Math.random()*100}]);
+        co2.push([{time: T, y: Math.random()*100}]);
+        temperature.push([{time: T, y: Math.random()*100}]);
+        humidity.push([{time: T, y: Math.random()*100}]);
+        soundlevel.push([{time: T, y: Math.random()*100}]);
       }
     }, 1000);
 
@@ -122,22 +143,10 @@
       nextsample = T + 1.0;
       msg = JSON.parse(msg);
       console.log('UPDATE', msg);
-      co2.push([{
-        time: T,
-        y: msg.ppm
-      }]);
-      temperature.push([{
-        time: T,
-        y: msg.temp
-      }]);
-      humidity.push([{
-        time: T,
-        y: msg.humid
-      }]);
-      soundlevel.push([{
-        time: T,
-        y: msg.sound
-      }]);
+      co2.push([{ time: T, y: msg.ppm + Math.random() * 15.0 }]);
+      temperature.push([{ time: T, y: msg.temp + Math.random() * 1.0 }]);
+      humidity.push([{ time: T, y: msg.humid + Math.random() * 1.0 }]);
+      soundlevel.push([{ time: T, y: msg.sound + Math.random() * 0.1 }]);
     });
   </script>
 </body>
