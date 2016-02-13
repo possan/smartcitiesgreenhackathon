@@ -1,8 +1,8 @@
-# AQ
+# AWAIR
 
 Our contribution to the [Smart Cities Green Hackathon in Stockholm](http://smartcities.greenhackathon.com/) Sweco City Sensors category.
 
-
+Smart sensor fusion of  air, noise and light pollution to provide actionable insights to make outdoor and indoor environments liveable and green
 
 ## The visualization
 
